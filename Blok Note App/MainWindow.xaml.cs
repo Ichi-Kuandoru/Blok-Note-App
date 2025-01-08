@@ -23,6 +23,12 @@ namespace Blok_Note_App
             Loaded += MainWindow_Loaded;
         }
 
+        public class Note
+        {
+            public string Rec { get; set; } // Название заметки
+            public string Cont { get; set; } // Содержимое заметки
+        }
+
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             Bas.ItemsSource = new[] {
