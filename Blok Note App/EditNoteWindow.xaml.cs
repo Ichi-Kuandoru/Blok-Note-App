@@ -14,14 +14,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Blok_Note_App;
 
+using System.Windows;
+using System.Windows.Controls;
+using static Blok_Note_App.MainWindow;
+
 namespace Blok_Note_App
 {
-    public class Note
-    {
-        public string Rec { get; set; } // Название заметки
-        public string Cont { get; set; } // Содержимое заметки
-    }
-
     public partial class EditNoteWindow : Window
     {
         private Note _note;
@@ -30,25 +28,33 @@ namespace Blok_Note_App
         {
             InitializeComponent();
             _note = note;
-            NameTextBox.Text = _note.Rec; // Предполагается, что Rec — это имя заметки
-            ContentTextBox.Text = _note.Cont; // Cont — это содержание заметки
+
+            
+            RecTextBox.Text = _note.Rec;
+            ContTextBox.Text = _note.Cont;
+        }
+
+        private void ColorButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+            Button clickedButton = sender as Button;
+            if (clickedButton != null)
+            {
+                
+                _note.ButtonColor = clickedButton.Background.ToString();
+            }
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            // Сохраняем изменения в заметку
-            _note.Rec = NameTextBox.Text;
-            _note.Cont = ContentTextBox.Text;
+            
+            _note.Rec = RecTextBox.Text;
+            _note.Cont = ContTextBox.Text;
 
-            // Возвращаем результат
-            DialogResult = true; // Это будет использоваться, чтобы сигнализировать об успешном сохранении
-            Close(); // Закрывает окно
-        }
-
-        private void ContentTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
+            
+            DialogResult = true;
+            Close();
         }
     }
-
 }
+

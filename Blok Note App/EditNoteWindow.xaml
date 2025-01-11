@@ -5,23 +5,32 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Blok_Note_App"
         mc:Ignorable="d"
-        Title="Edit Note" Height="300" Width="400">
+        Title=" " Height="370" Width="400">
     <Window.Resources>
         <local:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
     </Window.Resources>
 
     <StackPanel Margin="10">
-        <StackPanel>
-            <TextBox x:Name="NameTextBox" Text="{Binding NoteTitle, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock Text="Имя заметки" Foreground="Gray" Margin="10,-18,0,0" 
-                       Visibility="{Binding Path=SomeProperty, Converter={StaticResource StringToVisibilityConverter}}"/>
-        </StackPanel>
-        <StackPanel>
-            <TextBox x:Name="ContentTextBox" AcceptsReturn="True" Margin="0,30,0,0" TextWrapping="Wrap" 
-                     Text="{Binding NoteContent, UpdateSourceTrigger=PropertyChanged}" TextChanged="ContentTextBox_TextChanged" Height="124" />
-            <TextBlock Text="Сontent" Margin="10,-20,0,0" Foreground="Gray" 
-                       Visibility="{Binding Path=SomeProperty, Converter={StaticResource StringToVisibilityConverter}}"/>
-        </StackPanel>
-        <Button Content="Save" Click="SaveButton_Click" Height="26" Margin="0,30,0,0" Width="269"/>
+        <Label Content="Название заметки:"/>
+        <TextBox x:Name="RecTextBox" Margin="0,0,0,10"/>
+
+        <Label Content="Содержимое заметки:"/>
+        <TextBox x:Name="ContTextBox" Margin="0,0,0,10" AcceptsReturn="True" Height="150"/>
+
+        <Grid Margin="0,10,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Content="Сделать сейчас" Foreground="White" Background="#e62124" Click="ColorButton_Click" />
+            <Button Content="Запланировать" Foreground="Black" Background="#86e621" Grid.Column="1" Click="ColorButton_Click" />
+            <Button Content="Делегировать" Foreground="Black" Background="#21e6e3" Grid.Column="2" Click="ColorButton_Click" />
+            <Button Content="Игнорировать" Foreground="White" Background="#8121e6
+"  Grid.Column="3" Click="ColorButton_Click" />
+        </Grid>
+        
+        <Button Content="Сохранить" Click="SaveButton_Click"/>
     </StackPanel>
 </Window>

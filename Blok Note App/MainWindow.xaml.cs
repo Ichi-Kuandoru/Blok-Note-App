@@ -1,5 +1,8 @@
-﻿using System.Text;
+﻿using System.Collections.ObjectModel;
+using System.Text;
+using System.Collections.ObjectModel;
 using System.Windows;
+using Microsoft.EntityFrameworkCore; 
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -9,14 +12,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using static System.Net.Mime.MediaTypeNames;
+using static Blok_Note_App.MainWindow;
 
 namespace Blok_Note_App
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        public ObservableCollection<Note> Notes { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -25,27 +28,47 @@ namespace Blok_Note_App
 
         public class Note
         {
-            public string Rec { get; set; } // Название заметки
-            public string Cont { get; set; } // Содержимое заметки
+            public int Id { get; set; }
+            public string Rec { get; set; }
+            public string Cont { get; set; }
+            public string ButtonColor { get; set; }
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            Bas.ItemsSource = new[] {
-    new { Rec = "Первая запись", Cont = "Сегодня я узнал, что природа вдохновляет на творчество. С каждым шагом по лесу ощущаю, как свежий воздух наполняет мои легкие, а пение птиц успокаивает разум. Подумал о том, как важно иногда отключаться от всех технологий и просто насладиться окружающей красотой."},
-    new { Rec = "Вторая запись", Cont = "Не забудьте порадовать себя чем-то приятным в конце недели. Я планирую провести вечер с любимой книгой и чашкой горячего шоколада. Это станет для меня отличным способом расслабиться послеbusy week. Иногда простые вещи приносят наибольшее удовольствие."},
-    new { Rec = "Третья запись", Cont = "Чтение книги всегда расширяет горизонты. На данный момент я читаю классическую литературу, и каждая страница заставляет меня задумываться о жизни и отношениях между людьми. Это удивительное путешествие в мир мыслей, которое обогащает мой внутренний мир."},
-    new { Rec = "Четвёртая запись", Cont = "Планирую поездку в новые края, чтобы познакомиться с культурой. Я хочу посетить маленький город, о котором прочитал в блоге путешественника. Говорят, там есть прекрасные архитектурные памятники и интересные музеи. Я надеюсь, эта поездка подарит мне незабываемые впечатления."},
-    new { Rec = "Пятая запись", Cont = "Завтра встречаюсь с друзьями, надеюсь, будет много весёлых моментов. Мы планируем сходить в наше любимое кафе и обсудить последние события. Такие встречи помогают укрепить дружбу и создать общие воспоминания, которые останутся с нами на долгое время."},
-    new { Rec = "Шестая запись", Cont = "Музыка помогает мне сосредоточиться и найти вдохновение. В последнее время я открываю для себя различные жанры, и это становится настоящим приключением. По утрам я слушаю инструментальные композиции, что помогает мне начать день с хорошим настроением."},
-    new { Rec = "Седьмая запись", Cont = "Сегодня попробовал новый рецепт, и это было просто великолепно! Я сделал пасту с сезонными овощами и ароматными травами, и вся семья осталась в восторге. Кулинария для меня — это не просто процесс, а возможность проявить свою креативность и порадовать близких."},
-    new { Rec = "Восьмая запись", Cont = "Помните, что время, проведенное с близкими, - это самое ценное. На этой неделе я организовал семейный ужин, на который пригласил всех. Мы много разговаривали, смеялись и рассказывали истории из прошлого. Это напомнило мне, как важно поддерживать связи с родными."},
-    new { Rec = "Девятая запись", Cont = "Нужно чаще гулять на свежем воздухе. Сегодня я вышел на длинную прогулку в парк и наслаждался каждым моментом. Природа вокруг меня завораживала, и я осознал, как порой не хватает таких простых радостей в жизни."},
-    new { Rec = "Десятая запись", Cont = "Обнаружил интересный документальный фильм, который стоит посмотреть. Он рассказывает о борьбе за экологию и важности сохранения планеты. Фильм произвел огромное впечатление и заставил меня задуматься о том, что каждый из нас может внести свой вклад в защиту окружающей среды."},
-    new { Rec = "Одиннадцатая запись", Cont = "Не забывайте записывать свои мысли. Я начал вести дневник, и это помогает мне разобраться в своих чувствах и эмоциях. Пока я пишу, многие идеи приходят в голову, и я понимаю, как важно оставить след в своем внутреннем мире."},
-    new { Rec = "Двенадцатая запись", Cont = "Сегодня просто отдыхал и обдумывал планы на будущее. Я тут же понял, что без надежд и целей жизнь теряет свои краски. Я составил список вещей, которые хочу реализовать в этом году, и чувствую волнение от предстоящих изменений."}
-};
-    
+            using (var context = new AppDbContext())
+            {
+                Notes = new ObservableCollection<Note>(context.Notes.ToList());
+            }
+            Bas.ItemsSource = Notes; 
+        }
+
+        private void NoteButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button clickedButton = sender as Button;
+            if (clickedButton != null)
+            {
+                Note selectedNote = clickedButton.DataContext as Note;
+                if (selectedNote != null)
+                {
+                    EditNoteWindow editWindow = new EditNoteWindow(selectedNote);
+                    if (editWindow.ShowDialog() == true)
+                    {
+                        Bas.Items.Refresh();
+                    }
+                }
+            }
+        }
+    }
+
+    public class AppDbContext : DbContext
+    {
+        public DbSet<Note> Notes { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseMySql("Server=your_ip_address;Database=database_name;User ID=username;Password=password;Port=3306;",
+                new MySqlServerVersion(new Version(8, 0, 21))); 
         }
     }
 }

@@ -5,23 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Blok_Note_App"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="850">
+        Title="Blok Note App" Height="500" Width="850">
     <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10">
         <WrapPanel Orientation="Horizontal">
             <ItemsControl x:Name="Bas">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button Margin="5" Width="250">
-                            <Grid Background="LightGray">
+                        <Button Margin="5" Width="250" Height="Auto" Background="{Binding ButtonColor}" Click="NoteButton_Click">
+                            <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
-                                    <!-- Имя записи -->
                                     <RowDefinition/>
-                                    <!-- Контент Записи -->
                                 </Grid.RowDefinitions>
-                                <TextBlock Text="{Binding Rec}" Background="Gray" VerticalAlignment="Top" />
-                                <TextBlock Text="{Binding Cont}" Grid.Row="1" VerticalAlignment="Top" 
-                                       TextWrapping="Wrap" />
+                                <Border Background="#CDCDCDF0" Margin="5" CornerRadius="5">
+                                    <TextBlock Text="{Binding Rec}" VerticalAlignment="Top" />
+                                </Border>
+                                <Border Background="#616161F0" Grid.Row="1" Margin="5" CornerRadius="5">
+                                    <TextBlock Text="{Binding Cont}" VerticalAlignment="Top" TextWrapping="Wrap" />
+                                </Border>
                             </Grid>
                         </Button>
                     </DataTemplate>
